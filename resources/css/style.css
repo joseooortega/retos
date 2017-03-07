@@ -1,0 +1,70 @@
+/* GLOBAL STYLES */
+
+* {-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;}
+a {color: inherit; text-decoration: none;}
+ul {list-style: none; padding: 0px;}
+.container {width: 1170px; max-width: 100%; margin: 0 auto;}
+body {font-family: 'musket_r'; font-size: 14px; margin: 0px;}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: black;
+  opacity:1 !important;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: black;
+  opacity:1 !important;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: black;
+  opacity:1 !important;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: black;
+  opacity:1 !important;
+}
+
+
+
+/* HEADER */
+header {width: 100%; padding: 20px;}
+header .user {float: right;}
+header .user > a {background: transparent url('img/user.png') no-repeat scroll 50% 50%; display: block; height: 20px; width: 19px;}
+header nav ul {text-align: center;}
+header nav li {display: inline; margin: 0px 20px; font-size: 18px;}
+
+
+/* CONTENT */
+#content {padding: 40px 0px;}
+
+/* USER PANEL*/
+
+form {width: 700px; margin: 0 auto; text-align: center;}
+form input {width: 100%; margin: 5px 0px; border: 0px; padding: 7px; background-color: #C0C0C0; color: black; font-family: 'musket_r'; line-height: 15px;}
+form input[type="submit"] {width: auto; padding: 10px 20px; color: white; border-radius: 100px; text-transform: uppercase; cursor: pointer; transition: background-color 0.3s;}
+form input[type="submit"]:hover {background-color: #808080; transition: background-color 0.3s;}
+
+/* FOOTER */
+footer {padding: 40px; background-color: #333; color: white;}
+
+
+@media query (max-width: 1200px) {
+
+}
+
+/* FONTS */
+
+@font-face {
+    font-family:'musket_b';
+    src:url('fonts/musket_b.eot');
+    src:url('fonts/musket_b.eot?#iefix') format('embedded-opentype'), url('fonts/musket_b.woff') format('woff'), url('fonts/musket_b.ttf') format('truetype'), url('fonts/musket_b.svg') format('svg');
+    font-weight:normal;
+    font-style:normal
+}
+
+@font-face {
+    font-family:'musket_r';
+    src:url('fonts/musket_r.eot');
+    src:url('fonts/musket_r.eot?#iefix') format('embedded-opentype'), url('fonts/musket_r.woff') format('woff'), url('fonts/musket_r.ttf') format('truetype'), url('fonts/musket_r.svg') format('svg');
+    font-weight:normal;
+    font-style:normal
+}
