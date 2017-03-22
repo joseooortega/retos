@@ -7,6 +7,7 @@ Por hacer:
 
 */
 
+
 var forms = [];
 var forms_html = [];
 
@@ -14,12 +15,8 @@ $(document).ready(function(){
 
   get_forms();
   submit_form();
-
-  var form_prueba = $('#new_user')[0];
-  $('footer .container').click(function(){
-    form_prueba = $('<div/>').html(form_prueba).contents();
-    console.log(form_prueba);
-  });
+  focus_out_input();
+  keyup_input();
 
 });
 
@@ -36,73 +33,100 @@ function get_forms(){
     forms_html.push(elem);
   });
 }
+function validate_input(elem, this_form = false){
 
+  var val = elem.val();
+  var name = elem.attr('name');
+  var required = elem.hasAttr('class') == true ? (elem.attr('class').indexOf('required') == -1 ? false : true) : false;
+  var max_lenght = elem.hasAttr('maxlength') == true ? elem.attr('maxlength') : false;
+  var min_lenght = elem.hasAttr('minlength') == true ? elem.attr('minlength') : false;
+  var clear = true;
+
+
+  if (this_form !== false){
+    var max_lenght = this_form.find('input[name="'+name+'"]').hasAttr('maxlength') == true ? this_form.find('input[name="'+name+'"]').attr('maxlength') : false;
+    var min_lenght = this_form.find('input[name="'+name+'"]').hasAttr('minlength') == true ? this_form.find('input[name="'+name+'"]').attr('minlength') : false;
+  }
+
+  if (required && val.length == 0){
+    message_form(elem, 'Este campo es obligatorio', false);
+    return false;
+  }
+
+  var regex = [];
+  var message = [];
+
+  if (max_lenght !== false)
+    check_max_lenght(regex, message, max_lenght);
+  if (min_lenght !== false)
+    check_min_lenght(regex, message, min_lenght);
+
+
+  switch (elem.attr('type')) {
+    case 'text':
+      regex.push(new RegExp('^[A-Za-z0-9]{'+val.length+'}$'));
+      message.push('Caracteres no válidos!!');
+      break;
+    case 'email':
+      regex.push(new RegExp('^.+@.+[.].+'));
+      message.push('Email no válido, tiene que ser del tipo "algo@algo.algo"');
+      break;
+    case 'password':
+      var rx = [
+        new RegExp('(?=.*[A-Z]+)'),
+        new RegExp('(?=.*[a-z]+)'),
+        new RegExp('(?=.*[0-9]+)'),
+        new RegExp('(?=.*[!@#$&()=%*]+)'),
+        new RegExp('^.{0,12}$'),
+      ];
+      var msg = [
+        'Tiene que tener al menos una letra <b>mayúscula</b>',
+        'Tiene que tener al menos una letra <b>minúscula</b>',
+        'Tiene que tener al menos un <b>número</b>',
+        'Tiene que tener al menos un caracter <b>especial</b>',
+        'Como máximo puede tener 12 caracteres',
+      ];
+      regex = regex.concat(rx);
+      message = message.concat(msg);
+      break;
+    default:
+      e.preventDefault();
+  }
+
+  for (var i=0;i<regex.length; i++) {
+    if (!regex[i].test(val)){
+      clear = false;
+      message_form(elem, message[i], clear);
+    }
+  }
+
+  if (clear) message_form(elem, '', clear);
+
+  return clear;
+
+}
 function validation_form(id, e) {
-  //e.preventDefault();
+
   $('#'+id).find('input:not([type="submit"])').each(function(){
 
     var name = $(this).attr('name');
-
-    if (name == 'password') {
-      var this_form = get_form(id);
+    var this_form = get_form(id);
 
 
-      if (this_form.find('input[name="'+name+'"]').length == 0){
-        e.preventDefault();
-        console.log('OK');
-        message_form($(this), 'Ha ocurrido un error, actualiza y vuelve a intentarlo por favor', false);
-        return false;
-      }
-
-      var val = $(this).val();
-      var required = $(this).hasAttr('class') == true ? ($(this).attr('class').indexOf('required') == -1 ? false : true) : false;
-      var max_lenght = this_form.find('input[name="'+name+'"]').hasAttr('maxlength') == true ? this_form.find('input[name="'+name+'"]').attr('maxlength') : false;
-      var min_lenght = this_form.find('input[name="'+name+'"]').hasAttr('minlength') == true ? this_form.find('input[name="'+name+'"]').attr('minlength') : false;
-      var clear = true;
-
-      var regex = /^/;
-      var message = '';
-
-      switch ($(this).attr('type')) {
-        case 'text':
-          regex = [new RegExp('^[A-Za-z0-9]{'+val.length+'}$')];
-          message = ['Caracteres no válidos!!'];
-          if (max_lenght !== false)
-            check_max_lenght(regex, message, max_lenght);
-          if (min_lenght !== false)
-            check_min_lenght(regex, message, min_lenght);
-          break;
-        case 'email':
-          regex = [new RegExp('^.+@.+[.].+')];
-          message = ['Email no válido, tiene que ser del tipo "algo@algo.algo"'];
-          break;
-        case 'password':
-          regex = [new RegExp('^(?=.*[A-Z]+)(?=.*[!@#$&()=%*]+)(?=.*[0-9]+)(?=.*[a-z]+).{0,12}$')];
-          message = ['Contraseña débil al menos tiene que tener un <b>número</b></br> una <b>letra</b> (mayuscula y minúscula)</br> y un caracter <b>especial</b>'];
-          if (max_lenght !== false)
-            check_max_lenght(regex, message, max_lenght);
-          if (min_lenght !== false)
-            check_min_lenght(regex, message, min_lenght);
-          break;
-        default:
-          e.preventDefault();
-      }
-      //console.log(regex);
-      for (var i=0;i<regex.length; i++) {
-        console.log(regex[i].test(val));
-        if (!regex[i].test(val)){
-          clear = false;
-          e.preventDefault();
-          message_form($(this), message[i], clear);
-          return false;
-        }
-      }
-
-      if (clear) message_form($(this), '', clear);
+    if (this_form === false || this_form.find('input[name="'+name+'"]').length == 0){
+      e.preventDefault();
+      message_form($(this), 'Ha ocurrido un error, actualiza y vuelve a intentarlo por favor', false);
+      return false;
     }
 
+    var check = validate_input($(this), this_form);
+    if (check === false){
+      $(this).addClass('invalid');
+      e.preventDefault()
+    }else{
+      $(this).addClass('valid');
+    }
   });
-  e.preventDefault();
 }
 
 function check_min_lenght(regex, message, min_lenght){
@@ -117,7 +141,44 @@ function check_max_lenght(regex, message, max_lenght){
   regex.push(new RegExp(parte1+max_lenght+parte2));
   message.push('Como máximo puede haber '+max_lenght+' caracter(es)');
 }
+function keyup_input(){
+  $('form input').not('[type="submit"]').keyup(function(e){
 
+    if (e.keyCode == 9)
+      return false;
+
+
+    $(this).removeClass('valid invalid');
+
+    if ($(this).next().hasAttr('class') == true && $(this).next().attr('class').indexOf('message_input_form') != -1){
+      $(this).next().empty();
+    }
+    var this_form = get_form($(this).closest('form').attr('id'));
+    var check = validate_input($(this), this_form);
+
+    if (check == true){
+      $(this).addClass('valid');
+    }else{
+      $(this).addClass('invalid');
+    }
+  });
+}
+function focus_out_input(){
+  $('form input').not('[type="submit"]').focusout(function(e){
+
+    if ($(this).next().hasAttr('class') == true && $(this).next().attr('class').indexOf('message_input_form') != -1){
+      $(this).next().empty();
+    }
+    var this_form = get_form($(this).closest('form').attr('id'));
+    var check = validate_input($(this), this_form);
+
+    if (check == true){
+      $(this).addClass('valid');
+    }else{
+      $(this).addClass('invalid');
+    }
+  });
+}
 function submit_form(){
   $('form input[type="submit"]').click(function(e){
 
@@ -145,6 +206,7 @@ function get_form(id){
       return forms_html[i];
     }
   }
+  return false;
 }
 
 function message_form(element, message, clear){

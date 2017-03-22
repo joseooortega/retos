@@ -10,6 +10,7 @@ class MY_Controller extends CI_Controller {
 		parent::__construct();
 
 		$this->load->helper('url');
+		$this->load->helper('custom');
 		$this->load->library('session');
 
 
@@ -41,11 +42,11 @@ class MY_Controller extends CI_Controller {
 		return password_hash($string, PASSWORD_DEFAULT);
 	}
 
-	public function verify_hash($hash){
-		if (password_verify('rasmuslerdorf', $hash)){
-			//die('OK1');
-		}else{
-			//die('Ok2');
+	public function verify_hash($string, $hash){
+		if (password_verify($string, $hash)) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 }

@@ -52,6 +52,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'home';
 
 $route['user'] = 'user_panel';
+$route['user/(:any)/submit'] = 'user_panel/manage_user/$1';
+$route['user/(:any)'] = 'user_panel/index/$1';
 
 $route['login'] = 'login';
 $route['login/check'] = 'login/check';

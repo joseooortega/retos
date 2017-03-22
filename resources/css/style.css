@@ -42,6 +42,8 @@ form {width: 700px; margin: 0 auto; text-align: center;}
 form input {width: 100%; margin: 5px 0px; border: 0px; padding: 7px; background-color: #C0C0C0; color: black; font-family: 'musket_r'; line-height: 15px;}
 form input[type="submit"] {width: auto; padding: 10px 20px; color: white; border-radius: 100px; text-transform: uppercase; cursor: pointer; transition: background-color 0.3s;}
 form input[type="submit"]:hover {background-color: #808080; transition: background-color 0.3s;}
+form input.valid {background: #C0C0C0 url('img/tick.png') no-repeat scroll 98% 50% / auto 70%;}
+form input.invalid {background: #C0C0C0 url('img/cerrar.png') no-repeat scroll 98% 50% / auto 70%;}
 
 /* FOOTER */
 footer {padding: 40px; background-color: #333; color: white;}

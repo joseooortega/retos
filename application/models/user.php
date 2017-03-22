@@ -8,12 +8,12 @@ class User extends CI_Model {
 
   private $table = 'user';
 
-  public function new($data) {
+  public function new($data){
     $this->db->insert($this->table, $data);
   }
 
   public function update($data) {
-    $this->db->update($this->table, $data, array('id' =>$data['id']));
+    $this->db->update($this->table, $data, array('id' => $data['id']));
   }
 
   public function delete($id, $permanent = false) {
@@ -24,10 +24,9 @@ class User extends CI_Model {
     }
   }
 
-  public function login($data){
-    $this->db->reset_query();
-    $this->db->where(array('username' => $data['username'], 'password' => $data['password']));
-    $query = $this->db->get($this->table);
-    return $query->result();
+  public function get_userByUsername($username){
+    $this->db->where(array('username' => $username));
+    $query = $this->db->get();
+    return $query->result_array();
   }
 }
