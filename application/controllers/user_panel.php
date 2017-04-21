@@ -16,7 +16,7 @@ class User_panel extends MY_Controller {
 		//die(var_dump($this->session->userdata('user')));
 		$user = new User_object();
 		$user->set_username('admin');
-		$user->login(12);
+		$user->login();
 
 		$data['js'] = array();
 		$data['action'] = $action;
